@@ -1,3 +1,4 @@
+
 import random
 def file_opener(name_file,distance_file):
     try:
