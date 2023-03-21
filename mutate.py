@@ -1,4 +1,3 @@
-
 import random
 def file_opener(name_file,distance_file):
     try:
@@ -37,6 +36,12 @@ def route_distance_finder(route):
 
 print(route_distance_finder([0,3,5,6,1,2,4]))
 
+def city_printer(final_route):
+    city_path=list()
+    for index in final_route:
+        city_path.append(cities[index])
+    return city_path
+
 
 def mutator(initial_route):
     route=initial_route.copy()
@@ -61,7 +66,7 @@ def tsp_mutation():
     initial_travel_time=route_distance_finder(initial_route)
     STOP = 0
     previous_champion = 1000
-    while STOP<10:
+    while STOP<100:
         gen=list()
         offspring=0
         while offspring<100:
@@ -77,9 +82,12 @@ def tsp_mutation():
         print(saved_tuple)
         initial_route=saved_tuple[0]
         STOP+=1
-    return initial_route,previous_champion
+    final_route=city_printer(saved_tuple[0])
+    return initial_route,final_route,previous_champion
 
 print(tsp_mutation())
+
+
 
 
 
