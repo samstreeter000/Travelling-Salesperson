@@ -1,10 +1,11 @@
 
+#ahhhhhhhhhhhhhhhhhhhhhhh
 import random
 def file_opener(name_file,distance_file):
     try:
         distances = open(distance_file)
         names = open(name_file)
-    except:
+    except: 
         print('Cannot open input file.')
     global cities
     cities = list()
@@ -18,7 +19,7 @@ def file_opener(name_file,distance_file):
 
     return cities, distance
 
-print(file_opener("seven_cities_names.txt",'seven_cities_dist.txt'))
+file_opener("seven_cities_names.txt",'seven_cities_dist.txt')
 
 def distance_finder(city_1,city_2):
     between=float(distance[city_1][city_2])
@@ -35,7 +36,6 @@ def route_distance_finder(route):
         travel+=distance_finder(route[i],route[j])
     return travel
 
-print(route_distance_finder([0,3,5,6,1,2,4]))
 
 
 def mutator(initial_route):
@@ -56,30 +56,14 @@ def mutator(initial_route):
 
 def tsp_mutation():
     initial_route=list()
+    travel_time=0
     for i in range(len(cities)):
         initial_route.append(i)
     initial_travel_time=route_distance_finder(initial_route)
-    STOP = 0
-    previous_champion = 1000
-    while STOP<10:
-        gen=list()
-        offspring=0
-        while offspring<100:
-            new_route=mutator(initial_route)
-            gen.append(new_route)
-            offspring+=1
-        highest_fitness=1000
-        for tuple in gen:
-            if int(tuple[1])<highest_fitness:
-                highest_fitness=int(tuple[1])
-                saved_tuple=tuple
-        previous_champion=saved_tuple[1]
-        print(saved_tuple)
-        initial_route=saved_tuple[0]
-        STOP+=1
-    return initial_route,previous_champion
+
+    print(initial_route, initial_travel_time)
+    print(mutator(initial_route))
+
+
 
 print(tsp_mutation())
-
-
-
