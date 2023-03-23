@@ -17,7 +17,8 @@ def file_opener(name_file,distance_file):
 
     return cities, distance
 
-file_opener("seven_cities_names.txt",'seven_cities_dist.txt')
+##file_opener("seven_cities_names.txt",'seven_cities_dist.txt')
+##file_opener("thirty_cities_names.txt","thirty_cities_dist.txt")
 
 def distance_finder(city_1,city_2):
     between=float(distance[city_1][city_2])
@@ -59,11 +60,20 @@ def tsp_greedy():
             route.append(next_city)
             new_cities.remove(next_city)
         paths.append((route,route_distance_finder(route)))
-        length=10000
+        length=100000
         for tuple in paths:
             if tuple[1]<length:
                 length=tuple[1]
-                final_route=tuple
-    return final_route
+                final=tuple
+        final_route=city_printer(final[0])
+        final_length=final[1]
+    return final_route, final_length
 
+
+##file_opener("seven_cities_names.txt",'seven_cities_dist.txt')
+##print(tsp_greedy())
+file_opener("thirty_cities_names.txt","thirty_cities_dist.txt")
 print(tsp_greedy())
+
+
+
