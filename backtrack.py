@@ -56,6 +56,7 @@ def route_distance_finder(route):
             #between two subsequent cities in the route.
         travel += distance_finder(route[i], route[j])
     return travel
+<<<<<<< HEAD
 def city_printer(final_route):
     """
     :param final_route:
@@ -136,3 +137,7 @@ def tsp_recursion(initial_route,remaining_cities):
 ##This line generates the absolute shortest path between 7 cities in the relevant text files.
 ##This solution is:(['Alpha', 'Epsilon', 'Gamma', 'Delta', 'Zeta', 'Beta', 'Eta'], 106.4).
 print(tsp_backtrack("seven_cities_names.txt",'seven_cities_dist.txt'))
+
+
+
+
