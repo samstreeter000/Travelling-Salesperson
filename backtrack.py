@@ -1,14 +1,14 @@
+import random
 ##These four functions appears in all three algorithims, they serve to open files, compute distance between cities
 ##and over routes and convert lists of city indexes to the names of the cities.
 def file_opener(name_file,distance_file):
     """
-
     :param name_file: The text file containing the names
     of the cities
     :param distance_file: The text file containing the
     distances between all city pairs
     :return: None. This function creates global
-    lists cities and distance.
+    lists cities and distance that will be refrenced to later
     """
     try:
         distances = open(distance_file)
@@ -17,16 +17,15 @@ def file_opener(name_file,distance_file):
         print('Cannot open input file.')
     global cities
     cities = list()
-    #creates the list cities by reading the names text file
+    #creates the global list cities by reading the names text file
     for line in names:
         cities.append(line.strip('\n'))
     global distance
     distance = list()
-    #creates the list distance by reading the names text file
+    #creates the global list distance by reading the names text file
     for line in distances:
         length = line.split()
         distance.append(length)
-
 def distance_finder(city_1,city_2):
     """
     :param city_1: The index of the first city
@@ -41,13 +40,13 @@ def route_distance_finder(route):
     """
     :param route: A list of city indices detailing the
     order the cities were visited in.
-    :return: The distance covered by following the route
-    and returning to the initial city
+    :return: travel: The distance covered by following the route
+    and returning to the starting city
     """
     travel = 0
     for i in range(0, len(route)):
         ## If i is the final entry in route, we find the
-        ##distance between it and the final entry
+        ##distance between it and the first entry
         if i == len(route)-1:
             j = 0
         else:
@@ -56,17 +55,20 @@ def route_distance_finder(route):
             #between two subsequent cities in the route.
         travel += distance_finder(route[i], route[j])
     return travel
-<<<<<<< HEAD
 def city_printer(final_route):
     """
-    :param final_route:
-    :return:
+    :param final_route: A list of city indices detailing the
+    order the cities were visited in.
+    :return:city_path: A list of city names detailing the
+    order the cities were visited in.
     """
     city_path=list()
+    ##This for loop uses the index of a city and translates it to
+    ## the city name and compiles these city names into a list that
+    ## details the order cities were visited in.
     for index in final_route:
         city_path.append(cities[index])
     return city_path
-
 def tsp_backtrack(name_file,distance_file):
     """
     :param name_file: The text file containing the names
