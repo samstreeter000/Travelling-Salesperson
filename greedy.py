@@ -66,73 +66,54 @@ def city_printer(final_route):
         city_path.append(cities[index])
     return city_path
 
-def tsp_backtrack(name_file,distance_file):
+def tsp_greedy(name_file,distance_file):
     """
     :param name_file: The text file containing the names
     of the cities
     :param distance_file: The text file containing the
     distances between all city pairs
-    :return:path: The list of city names in the order they were visited in the optimized path.
-    :return:best[1]: The length of the distance travelled over the optimal path.
+    :return:best_route: The list of city names in the order they were visited in the optimized path.
+    :return:best_route_distance: The length of the distance travelled over the optimal path.
     """
-    global best_route_distance
-    global best_route
-    ## The best_route is initialized as an empty list with an arbitrarily large distance, so that any proposed path will be shorter in distance.
-    best_route_distance = 1000
-    best_route = list()
     ## Opens the relevant files and creates global lists cities and distance.
     file_opener(name_file,distance_file)
-    ## This for loop initializes the list of remaning cities to consider, it includes all the indexes of the relevant cities, excluding city index 0, 
-    ## as that city will always be our starting point.
-    remaining_cities=list()
-    for index in range(1,len(cities)):
-        remaining_cities.append(index)
-    initial_route=[0]
-    ## tsp_recursion returns the absolute best route over the search space as well as its distance as an ordered pair.
-    best=tsp_recursion(initial_route,remaining_cities)
-    ##city printer uses the list of city indexes in the best route and translates them to the names of city in the list
-    path=city_printer(best[0])
-    return path,best[1]
-
-def tsp_recursion(initial_route,remaining_cities):
-    """
-    :param initial_route: This input is the partial route that is being built recursively.
-    :param remaining_cities: The cities that are left to be visited for the current route being built.
-    :return: 
-    """
-    global best_route_distance
-    global best_route
-    ##If there are no more cities to be visited and the current route has a shorter distance covered than the previous best route,
-    ##then store the current route as the best route.
-    if remaining_cities==list():
-        if route_distance_finder(initial_route)<best_route_distance:
-            best_route_distance=route_distance_finder(initial_route)
-            best_route=initial_route
-    ##Otherwise, we need to continue building our path. If we have exactly one element in our current route, then we generate the second and final entries 
-    ##simultaneously, append them to our current route, remove them from remaining cities and feed the updated current route into our recursive function.
-    ##Generating the second and list cities simultaneously keeps us from considering routes that are simply rotations of other routes.
-    elif len(initial_route)==1:
-        for city1 in remaining_cities:
-            for city2 in remaining_cities:
-                if city1<city2:
-                    route=initial_route.copy()
-                    locations=remaining_cities.copy()
-                    route.append(city1)
-                    route.append(city2)
-                    locations.remove(city1)
-                    locations.remove(city2)
-                    tsp_recursion(route,locations)
-    ##If our current route has more than one element, then we append a city, remove it from the remaining cities list and feed it into the 
-    ##recusriv function.
-    else:
-        for city in remaining_cities:
-            route = initial_route.copy()
-            locations = remaining_cities.copy()
-            route.insert(-1,city)
-            locations.remove(city)
-            tsp_recursion(route, locations)
+    ## This for loop generates a list of integers ranging from 0 to the
+    ##number of cities minus one.
+    city_index = list()
+    for i in range(len(cities)):
+        city_index.append(i)
+    ##Initalzie best route as an empty list with an arbitrarily high corresponding distance.
+    best_route=list()
+    best_route_distance=100000
+    ##We now use a for loop that will create one route for each city we have, starting each route with the corresponding city.
+    for start_city in city_index:
+        route=[start_city]
+        remaining_cities=city_index.copy()
+        remaining_cities.remove(start_city)
+        ##This while loop looks at the current route being built and determines what city is closest to the final city in the
+        ## route. That city is then removed from the list of available cities and the process is repeated
+        ##until all the city options are exhausted.
+        while remaining_cities!=[]:
+            shortest_step=1000
+            for city in remaining_cities:
+                step=distance_finder(route[-1],city)
+                if step<shortest_step:
+                    shortest_step=step
+                    next_city=city
+            route.append(next_city)
+            remaining_cities.remove(next_city)
+            ##After an entire route has been generated, this if statement checks if that route
+            ## is the best route found so far, that is starting at which city produces the best results
+        if route_distance_finder(route)<best_route_distance:
+            best_route_distance=route_distance_finder(route)
+            ##City printer converts the current best route into a list of city names.
+            best_route=city_printer(route)
     return best_route,best_route_distance
 
-##This line generates the absolute shortest path between 7 cities in the relevant text files.
-##This solution is:(['Alpha', 'Epsilon', 'Gamma', 'Delta', 'Zeta', 'Beta', 'Eta'], 106.4).
-print(tsp_backtrack("seven_cities_names.txt",'seven_cities_dist.txt'))
+
+##This line generates a greedy path between 7 cities in the relevant text files.
+##This solution is:(['Eta', 'Alpha', 'Epsilon', 'Gamma', 'Delta', 'Beta', 'Zeta'], 114.3).
+print(tsp_greedy("seven_cities_names.txt",'seven_cities_dist.txt'))
+##This line generates a greedy path between 30 cities in the relevant text files.
+##This solution has a distance of 527.0.
+print(tsp_greedy("thirty_cities_names.txt","thirty_cities_dist.txt"))
